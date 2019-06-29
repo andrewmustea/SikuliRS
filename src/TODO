@@ -1,3 +1,5 @@
 Separate all bank operations into its own class.
 Separate all inventory operations into its own class.
 Make a withdraw amount enum in withdrawFromBank()
+Make a log function
+Have an herb/picture class

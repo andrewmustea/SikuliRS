@@ -3,12 +3,10 @@ package Scripts.Herblore;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.concurrent.TimeUnit;
 
 import org.sikuli.script.FindFailed;
 import org.sikuli.script.Match;
 import org.sikuli.script.Region;
-import org.sikuli.script.Screen;
 
 import Common.Enums.ClickType;
 import Common.Util.Coordinates;
@@ -128,7 +126,7 @@ public class Herblore {
             // Remove the teamviewer prompt if necessary
             System.out.println("Is there a TeamViewer dialog box to remove? Enter 1 for yes. Enter anything else for no");
             input = reader.readLine();
-            if (input.equals("1")) removeTeamViewerPrompt();
+            if (input.equals("1")) RSTools.removeTeamViewerPrompt();
 
             // Clean herbs
             if (CleanHerbs) cleanHerbs();
@@ -140,22 +138,6 @@ public class Herblore {
         catch (Exception e)
         {
             System.out.println(e.getMessage());
-        }
-    }
-
-    public static void removeTeamViewerPrompt() throws FindFailed, InterruptedException
-    {
-        // Wait 5 seconds for teamviewer to exit
-        TimeUnit.SECONDS.sleep(5);
-
-        // Find the prompt
-        Screen screen = new Screen();
-        Match teamviewerPrompt = screen.find("src/Common/Images/TeamViewerPrompt.png");
-        if (teamviewerPrompt != null)
-        {
-            // Click the ok button
-            Match okButton = teamviewerPrompt.find("src/Common/Images/TeamViewerOkButton.png");
-            okButton.click();
         }
     }
 
