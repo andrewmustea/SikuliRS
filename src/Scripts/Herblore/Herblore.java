@@ -9,38 +9,34 @@ import org.sikuli.script.Match;
 import org.sikuli.script.Region;
 
 import Common.Enums.ClickType;
+import Common.Item.Item;
 import Common.Util.Coordinates;
 import Common.Util.Pseudorandom;
 import Common.Util.RSTools;
 
-public class Herblore {
+public class Herblore
+{
+    public static boolean RuneLite = true;
 
-    // Bank pictures
-    public static String BankCleanHerb;
-    public static String BankGrimyHerb;
-    public static String BankWaterVial = "src/Scripts/Herblore/Images/BankWaterVial.png";;
-
-    // Inventory pictures
-    public static String InventoryCleanHerb;
-    public static String InventoryGrimyHerb;
-    public static String InventoryWaterVial = "src/Scripts/Herblore/Images/InventoryWaterVial.png";
-    public static String InventoryUnfinshedPotion;
-
-    // Other pictures
-    public static String PotionPrompt;
+    // Initialize the Herb and Water Vial
+    public static Herb anHerb;
+    public static Item WaterVial = new Item("WaterVial", "src/Scripts/Herblore/Images/WaterVial");
 
     public static void main(String[] args)
     {
+
+        Coordinates.set1440RuneLite();
+
         try
         {
-            boolean CleanHerbs = false;
+            boolean CleanHerbs  = false;
             boolean MakePotions = false;
 
             // Take input to decide what to do
             System.out.println("Enter 1 to clean herbs. Enter 2 to make potions. Enter 3 for both.");
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String input = reader.readLine();
 
+            String input = reader.readLine();
             switch(input)
             {
                 case "1":
@@ -67,55 +63,26 @@ public class Herblore {
             // Find out which herb to use
             System.out.println("Enter 1 to use harralander. Enter 2 to use ranarr. Enter 3 to use avantoe. Enter 4 to use snapdragon.");
             input = reader.readLine();
-
             switch(input)
             {
                 case "1":
                     System.out.println("Using harralander");
-
-                    BankCleanHerb            = "src/Scripts/Herblore/Images/BankCleanHarralander.png";
-                    BankGrimyHerb            = "src/Scripts/Herblore/Images/BankGrimyHarralander.png";
-                    InventoryCleanHerb       = "src/Scripts/Herblore/Images/InventoryCleanHarralander.png";
-                    InventoryGrimyHerb       = "src/Scripts/Herblore/Images/InventoryGrimyHarralander.png";
-                    InventoryUnfinshedPotion = "src/Scripts/Herblore/Images/InventoryUnfinishedHarralanderPotion.png";
-                    PotionPrompt             = "src/Scripts/Herblore/Images/HarralanderPotionPrompt.png";
-
+                    anHerb = new Herb("Harralander", "src/Scripts/Herblore/Images/Harralander");
                     break;
 
                 case "2":
                     System.out.println("Using ranarr");
-
-                    BankCleanHerb            = "src/Scripts/Herblore/Images/BankCleanRanarr.png";
-                    BankGrimyHerb            = "src/Scripts/Herblore/Images/BankGrimyRanarr.png";
-                    InventoryCleanHerb       = "src/Scripts/Herblore/Images/InventoryCleanRanarr.png";
-                    InventoryGrimyHerb       = "src/Scripts/Herblore/Images/InventoryGrimyRanarr.png";
-                    InventoryUnfinshedPotion = "src/Scripts/Herblore/Images/InventoryUnfinishedRanarrPotion.png";
-                    PotionPrompt             = "src/Scripts/Herblore/Images/RanarrPotionPrompt.png";
-
+                    anHerb = new Herb("Ranarr", "src/Scripts/Herblore/Images/Ranarr");
                     break;
 
                 case "3":
                     System.out.println("Using avantoe");
-
-                    BankCleanHerb            = "src/Scripts/Herblore/Images/BankCleanAvantoe.png";
-                    BankGrimyHerb            = "src/Scripts/Herblore/Images/BankGrimyAvantoe.png";
-                    InventoryCleanHerb       = "src/Scripts/Herblore/Images/InventoryCleanAvantoe.png";
-                    InventoryGrimyHerb       = "src/Scripts/Herblore/Images/InventoryGrimyAvantoe.png";
-                    InventoryUnfinshedPotion = "src/Scripts/Herblore/Images/InventoryUnfinishedAvantoePotion.png";
-                    PotionPrompt             = "src/Scripts/Herblore/Images/AvantoePotionPrompt.png";
-
+                    anHerb = new Herb("Avantoe", "src/Scripts/Herblore/Images/Avantoe");
                     break;
 
                 case "4":
                     System.out.println("Using snapdragon");
-
-                    BankCleanHerb            = "src/Scripts/Herblore/Images/BankCleanSnapdragon.png";
-                    BankGrimyHerb            = "src/Scripts/Herblore/Images/BankGrimySnapdragon.png";
-                    InventoryCleanHerb       = "src/Scripts/Herblore/Images/InventoryCleanSnapdragon.png";
-                    InventoryGrimyHerb       = "src/Scripts/Herblore/Images/InventoryGrimySnapdragon.png";
-                    InventoryUnfinshedPotion = "src/Scripts/Herblore/Images/InventoryUnfinishedSnapdragonPotion.png";
-                    PotionPrompt             = "src/Scripts/Herblore/Images/SnapdragonPotionPrompt.png";
-
+                    anHerb = new Herb("Snapdragon", "src/Scripts/Herblore/Images/Snapdragon");
                     break;
 
                 default:
@@ -143,17 +110,16 @@ public class Herblore {
 
     public static void cleanHerbs() throws FindFailed, InterruptedException, IOException
     {
+        if (RuneLite) RSTools.setWithdrawAllRuneLite();
+        else          RSTools.setWithdrawAll();
+
         while (true)
         {
-            // Begin bank search
-            RSTools.openBank();
-
             // Deposit items
-            RSTools.depositFromInventory(InventoryCleanHerb);
-            RSTools.depositFromInventory(InventoryGrimyHerb);
+            RSTools.depositAll();
 
             // Withdraw items
-            if (!RSTools.withdrawFromBank(BankGrimyHerb, InventoryGrimyHerb, -1))
+            if (!RSTools.withdrawOneClick(anHerb.GrimyBankPicture))
             {
                 break;
             }
@@ -161,29 +127,28 @@ public class Herblore {
             // Close bank
             RSTools.closeBank();
 
-            // Face north occasionally
-            Pseudorandom.pseudorandomNorth(0.25);
-
             // Clean all herbs
-            RSTools.clickOnAllInInventory(InventoryGrimyHerb);
+            RSTools.clickOnAllInInventory(anHerb.GrimyInventoryPicture);
+
+            // Open Bank
+            if (RuneLite) RSTools.openBankRuneLite();
+            else          RSTools.openBank();
         }
     }
 
     public static void makePotions() throws FindFailed, InterruptedException
     {
+        if (RuneLite) RSTools.setWithdrawXRuneLite();
+        else          RSTools.setWithdrawX();
+
         while(true)
         {
-            // Begin bank search
-            RSTools.openBank();
-
             // Deposit items
-            RSTools.depositFromInventory(InventoryCleanHerb);
-            RSTools.depositFromInventory(InventoryWaterVial);
-            RSTools.depositFromInventory(InventoryUnfinshedPotion);
+            RSTools.depositAll();
 
             // Withdraw Items
-            if (!RSTools.withdrawFromBank(BankCleanHerb, InventoryCleanHerb, 14) ||
-                !RSTools.withdrawFromBank(BankWaterVial, InventoryWaterVial, 14))
+            if (!RSTools.withdrawOneClick(anHerb.BankPicture) ||
+                !RSTools.withdrawOneClick(WaterVial.BankPicture))
             {
                 break;
             }
@@ -191,21 +156,18 @@ public class Herblore {
             // Close bank
             RSTools.closeBank();
 
-            // Face north occasionally
-            Pseudorandom.pseudorandomNorth(0.25);
-
             // Make potions
-            Match herbMatch = Coordinates.Inventory.exists(InventoryCleanHerb);
-            Match vialMatch = Coordinates.Inventory.exists(InventoryWaterVial);
+            Match herbMatch = Coordinates.Inventory.exists(anHerb.InventoryPicture);
+            Match vialMatch = Coordinates.Inventory.exists(WaterVial.InventoryPicture);
             if (herbMatch != null && vialMatch != null)
             {
-                Pseudorandom.pseudorandomClick(new Region(herbMatch.getRect()), ClickType.LEFT, 0, 1);
-                Pseudorandom.pseudorandomClick(new Region(vialMatch.getRect()), ClickType.LEFT, 0, 1);
+                Pseudorandom.pseudorandomClick(new Region(herbMatch.getRect()), ClickType.LEFT, 0, 0.25);
+                Pseudorandom.pseudorandomClick(new Region(vialMatch.getRect()), ClickType.LEFT, 0, 0.25);
 
-                Match potionMatch = Coordinates.Chatbox.exists(PotionPrompt);
-                if (potionMatch != null)
+                Match promptMatch = Coordinates.Chatbox.exists(anHerb.PromptPicture);
+                if (promptMatch != null)
                 {
-                    Pseudorandom.pseudorandomClick(new Region(potionMatch.getRect()), ClickType.LEFT, 0, 1);
+                    Pseudorandom.pseudorandomClick(new Region(promptMatch.getRect()), ClickType.LEFT, 0, 0.25);
                     Pseudorandom.pseudorandomSleep(1, 5);
                 }
             }
@@ -213,6 +175,10 @@ public class Herblore {
             {
                 System.out.println("Couldn't find herb or water vial in bank");
             }
+
+            // Open Bank
+            if (RuneLite) RSTools.openBankRuneLite();
+            else          RSTools.openBank();
         }
     }
 }

@@ -12,6 +12,9 @@ public class Coordinates
 	// Bank
 	public static Region BankerRegion       = new Region(1351,582,15,57);
 	public static Region LargerBankerRegion = new Region(547,107,1216,1099);
+	public static Region CloseBank          = new Region(1372,237,18,18);
+	public static Region WithdrawX          = new Region(1195,1006,16,14);
+	public static Region WithdrawAll        = new Region(1221,1006,16,14);
 
 	// TODO make this a configurable setting in a JSON or .txt
 	public static void set1080()
@@ -26,15 +29,18 @@ public class Coordinates
 	    LargerBankerRegion = new Region(447,32,815,855);
 	}
 
-	public static void set1440()
+	public static void set1440RuneLite()
 	{
-	    Inventory   = new Region(2344,1101,193,261);
-        Chatbox     = new Region(6,1241,508,131);
-        Bankbox     = new Region(914,230,485,799);
-        BottomRight = new Region(2175,979,386,422);
+	    Inventory   = new Region(2308,1102,191,261);
+        Chatbox     = new Region(6,1240,508,131);
+        Bankbox     = new Region(898,234,477,791);
+        BottomRight = new Region(2091,947,433,453);
 
         // Bank
-        BankerRegion       = new Region(1351,582,15,57);
-        LargerBankerRegion = new Region(547,107,1216,1099);
+        BankerRegion       = new Region(1323,605,8,17);
+        LargerBankerRegion = new Region(692,135,905,1014);
+        CloseBank          = new Region(1354,237,18,18);
+        WithdrawX          = new Region(1177,1005,16,15);
+        WithdrawAll        = new Region(1202,1006,17,13);
 	}
 }

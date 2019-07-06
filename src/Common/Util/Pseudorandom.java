@@ -10,8 +10,8 @@ import org.sikuli.script.Screen;
 
 import Common.Enums.ClickType;
 
-public class Pseudorandom {
-
+public class Pseudorandom
+{
     public static Random rand = new Random();
 
     // Takes in a region and a buffer then returns a location with a random offset applied
@@ -42,7 +42,7 @@ public class Pseudorandom {
             Screen screen = new Screen();
             Region reg = screen.find("src/Common/Images/Compass.png");
 
-            pseudorandomClick(reg, ClickType.LEFT, 0, 1);
+            pseudorandomClick(reg, ClickType.LEFT, 0, 0.25);
         }
     }
 

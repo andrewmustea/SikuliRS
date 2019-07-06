@@ -11,26 +11,36 @@ import org.sikuli.script.Screen;
 
 import Common.Enums.ClickType;
 
-public class RSTools {
-
+public class RSTools
+{
     // Open the bank
     public static void openBank() throws InterruptedException, FindFailed
     {
         System.out.println("Opening bank");
         while(Coordinates.Bankbox.exists("src/Common/Images/BankOfGlielinor.png") == null)
         {
-            Pseudorandom.pseudorandomClick(Coordinates.BankerRegion, ClickType.RIGHT, 0, 1);
+            Pseudorandom.pseudorandomClick(Coordinates.BankerRegion, ClickType.RIGHT, 0, 0.25);
 
             Match bankMatch = Coordinates.LargerBankerRegion.exists("src/Common/Images/BankBanker.png");
             if (bankMatch != null)
             {
                 System.out.println("Found bank banker prompt");
-                Pseudorandom.pseudorandomClick(bankMatch, ClickType.LEFT, 0, 1);
+                Pseudorandom.pseudorandomClick(bankMatch, ClickType.LEFT, 0, 0.25);
             }
             else
             {
                 Pseudorandom.pseudorandomNorth(1);
             }
+        }
+    }
+
+    // Open the bank
+    public static void openBankRuneLite() throws InterruptedException, FindFailed
+    {
+        System.out.println("Opening bank");
+        while(Coordinates.Bankbox.exists("src/Common/Images/BankOfGlielinor.png") == null)
+        {
+            Pseudorandom.pseudorandomClick(Coordinates.BankerRegion, ClickType.LEFT, 0, 0.25);
         }
     }
 
@@ -44,13 +54,13 @@ public class RSTools {
             if (inventoryMatch != null)
             {
                 System.out.println("Found item in inventory: " + inPicture);
-                Pseudorandom.pseudorandomClick(inventoryMatch, ClickType.RIGHT, 0, 1);
+                Pseudorandom.pseudorandomClick(inventoryMatch, ClickType.RIGHT, 0, 0.25);
 
                 Match depositMatch = Coordinates.BottomRight.exists("src/Common/Images/DepositAll.png");
                 if (depositMatch != null)
                 {
                     System.out.println("Depositing: " + inPicture);
-                    Pseudorandom.pseudorandomClick(depositMatch, ClickType.LEFT, 0, 1);
+                    Pseudorandom.pseudorandomClick(depositMatch, ClickType.LEFT, 0, 0.25);
                     Pseudorandom.pseudorandomSleep(1, 1);
                 }
             }
@@ -73,8 +83,7 @@ public class RSTools {
         if (bankItemMatch != null)
         {
             // If the bank has the item, right click it
-            Region bankItemRegion = new Region(bankItemMatch.getRect());
-            Pseudorandom.pseudorandomClick(bankItemRegion, ClickType.RIGHT, 0, 1);
+            Pseudorandom.pseudorandomClick(new Region(bankItemMatch.getRect()), ClickType.RIGHT, 0, 0.25);
 
             // Look for the withdraw popup
             Match withdrawMatch = null;
@@ -98,18 +107,22 @@ public class RSTools {
             {
                 // Click the withdraw option
                 Region withdrawRegion = new Region(withdrawMatch.getRect());
-                Pseudorandom.pseudorandomClick(withdrawRegion, ClickType.LEFT, 0, 1);
+                Pseudorandom.pseudorandomClick(withdrawRegion, ClickType.LEFT, 0, 0.25);
+
+                return true;
+
+                // TODO Reimplement the withdraw check
 
                 // Check that the item was withdrawn
-                Match inventoryItemMatch = Coordinates.Inventory.exists(inInventoryPicture);
-                if (inventoryItemMatch != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    System.out.println("Error in withdrawing: " + inInventoryPicture);
-                }
+//                Match inventoryItemMatch = Coordinates.Inventory.exists(inInventoryPicture);
+//                if (inventoryItemMatch != null)
+//                {
+//                    return true;
+//                }
+//                else
+//                {
+//                    System.out.println("Error in withdrawing: " + inInventoryPicture);
+//                }
             }
             else
             {
@@ -124,14 +137,77 @@ public class RSTools {
         return false;
     }
 
+    public static void setWithdrawX() throws FindFailed, InterruptedException
+    {
+        openBank();
+        Pseudorandom.pseudorandomClick(Coordinates.WithdrawX, ClickType.LEFT, 0, 0.25);
+    }
+
+    public static void setWithdrawAll() throws FindFailed, InterruptedException
+    {
+        openBank();
+        Pseudorandom.pseudorandomClick(Coordinates.WithdrawAll, ClickType.LEFT, 0, 0.25);
+    }
+
+    public static void setWithdrawXRuneLite() throws FindFailed, InterruptedException
+    {
+        openBankRuneLite();
+        Pseudorandom.pseudorandomClick(Coordinates.WithdrawX, ClickType.LEFT, 0, 0.25);
+    }
+
+    public static void setWithdrawAllRuneLite() throws FindFailed, InterruptedException
+    {
+        openBankRuneLite();
+        Pseudorandom.pseudorandomClick(Coordinates.WithdrawAll, ClickType.LEFT, 0, 0.25);
+    }
+
+    // Be sure to set the quantity before calling this function
+    public static boolean withdrawOneClick(String inBankPicture) throws FindFailed, InterruptedException
+    {
+        System.out.println("Withdrawing from bank: " + inBankPicture);
+
+        // Check if the bank has the item
+        Match bankItemMatch = Coordinates.Bankbox.exists(new Pattern(inBankPicture).similar((float)0.99));
+        if (bankItemMatch != null)
+        {
+            Pseudorandom.pseudorandomClick(new Region(bankItemMatch.getRect()), ClickType.LEFT, 0, 0.25);
+
+            return true;
+        }
+        else
+        {
+            System.out.println("Could not find item: " + inBankPicture + " in bank");
+        }
+
+        return false;
+    }
+
+    public static void depositAll() throws FindFailed, InterruptedException
+    {
+        System.out.println("Depositing entire inventory");
+        Match depositAll = Coordinates.Bankbox.exists("src/Common/Images/DepositInventory.png");
+        if (depositAll != null)
+        {
+            Pseudorandom.pseudorandomClick(new Region(depositAll.getRect()), ClickType.LEFT, 0, 0.25);
+        }
+        else
+        {
+            System.out.println("Error when depositing entire inventory");
+        }
+    }
+
     // Close bank
     public static void closeBank() throws FindFailed, InterruptedException
     {
-        Match closeBox = Coordinates.Bankbox.exists("src/Common/Images/ClosePopup.png");
-        if (closeBox != null)
-        {
-            Pseudorandom.pseudorandomClick(new Region(closeBox.getRect()), ClickType.LEFT, 0, 1);
-        }
+        Pseudorandom.pseudorandomClick(Coordinates.CloseBank, ClickType.LEFT, 0, 0.25);
+
+        // TODO Reimplement a search function to close the bank
+
+//        Match closeBox = Coordinates.Bankbox.exists("src/Common/Images/ClosePopup.png");
+//        if (closeBox != null)
+//        {
+//            Pseudorandom.pseudorandomClick(new Region(closeBox.getRect()), ClickType.LEFT, 0, 0.25);
+//        }
     }
 
     // Click on all inventory items
@@ -148,7 +224,7 @@ public class RSTools {
             {
                 match = it.next();
 
-                Pseudorandom.pseudorandomClick(new Region(match.getRect()), ClickType.LEFT, 0, 0.25);
+                Pseudorandom.pseudorandomClick(new Region(match.getRect()), ClickType.LEFT, 0, 0);
             }
         }
         catch (FindFailed ff)
@@ -163,14 +239,35 @@ public class RSTools {
         // Wait 15 seconds for teamviewer to exit
         TimeUnit.SECONDS.sleep(15);
 
-        // Find the prompt
         Screen screen = new Screen();
-        Match teamviewerPrompt = screen.find("src/Common/Images/TeamViewerPrompt.png");
-        if (teamviewerPrompt != null)
+        while (true)
         {
-            // Click the ok button
-            Match okButton = teamviewerPrompt.find("src/Common/Images/TeamViewerOkButton.png");
-            okButton.click();
+            TimeUnit.MICROSECONDS.sleep(5);
+
+            Pseudorandom.pseudorandomNorth(1);
+
+            // Find the prompt
+            Match teamviewerPrompt = screen.exists("src/Common/Images/TeamViewerPrompt.png");
+            if (teamviewerPrompt != null)
+            {
+                // Click the ok button
+                Match okButton = teamviewerPrompt.exists("src/Common/Images/TeamViewerOkButton.png");
+
+                if (okButton != null)
+                {
+                    System.out.println("Clicking on teamviewer ok button.");
+                    okButton.click();
+                }
+                else
+                {
+                    System.out.println("Couldn't find ok button in teamviewer prompt.");
+                }
+            }
+            else
+            {
+                System.out.println("Teamviewer prompt not found.");
+                break;
+            }
         }
     }
 }

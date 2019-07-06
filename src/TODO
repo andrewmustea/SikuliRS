@@ -3,3 +3,7 @@ Separate all inventory operations into its own class.
 Make a withdraw amount enum in withdrawFromBank()
 Make a log function
 Have an herb/picture class
+Create custom exceptions 
+Add a global flag class
+
+Get keyboard interrupt

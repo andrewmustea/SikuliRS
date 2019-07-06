@@ -1,5 +1,6 @@
 package Common.Enums;
 
-public enum ClickType {
+public enum ClickType
+{
     LEFT, RIGHT, DOUBLE
 }

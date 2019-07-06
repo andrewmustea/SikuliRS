@@ -6,8 +6,8 @@ import org.sikuli.script.Screen;
 
 import Common.Enums.ClickType;
 
-public class CommonTools {
-
+public class CommonTools
+{
     // Determines the type of click to be used
     public static void Click(Location inLocation, ClickType inClickType) throws FindFailed
     {
