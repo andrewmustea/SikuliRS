@@ -43,4 +43,19 @@ public class Coordinates
         WithdrawX          = new Region(1177,1005,16,15);
         WithdrawAll        = new Region(1202,1006,17,13);
 	}
+
+	public static void set1080RuneLite()
+	{
+	    Inventory = new Region(1669,741,190,262);
+	    Chatbox = new Region(5,880,509,132);
+	    Bankbox = new Region(578,54,479,791);
+	    BottomRight = new Region(1517,633,367,407);
+
+	    //Bank
+	    BankerRegion = new Region(1009,436,12,19);
+	    LargerBankerRegion = new Region(406,31,841,893);
+	    CloseBank = new Region(1035,58,17,17);
+	    WithdrawX = new Region(858,826,15,14);
+	    WithdrawAll = new Region(883,827,16,11);
+	}
 }
