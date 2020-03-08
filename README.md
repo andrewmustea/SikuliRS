@@ -1,8 +1,8 @@
 # SikuliRS
 
-SikuliRS is a collection of software that uses the Sikuli automation platform automate some of the annoying and repetitive tasks in Old School Runescape.
+SikuliRS is a collection of software tools that uses the Sikuli automation platform to automate some of the annoying and repetitive tasks in Old School Runescape.
 
-I'm using this project as a learning tool become better developer and to get more acquainted with JavaFX and Sikuli.
+I'm using this project as a learning tool to become better developer and to get more acquainted with JavaFX and Sikuli.
 
 I'm working on this project on my own time so there may be a long wait between major commits to the baseline.
 
